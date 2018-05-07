@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVFNumberReader implements SDAReader {
+public class CSVFNumberReader {
 
-    @Override
-    public List<Card> read(String filePath) throws IOException {
+
+    public List<Card> readCardNumberFromFilePath(String filePath) throws IOException {
         CheckCardNumber checkCardNumber = new CheckCardNumber();
         FileReader reader = new FileReader(filePath);
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -27,11 +27,19 @@ public class CSVFNumberReader implements SDAReader {
             } else {
                 //wtym miejscu dodac algorytm i sprawdzic czy dziala
                 Card parsedCard = parseCSVRow(headers, line);
-                if (true == checkCardNumber.luhnCheck(parsedCard.getCardNumber())) {
+                if (checkCardNumber.luhnCheck(parsedCard.getCardNumber())) {
+
+                    CSVIssuerRoleReader roleReader = new CSVIssuerRoleReader();
+                    List<Issuer> issuers = roleReader.readIssuerForFilePath
+                            ("C:\\Users\\Dell\\Desktop\\projekty\\cartValidator\\CardIssuers.csv");
+
+                    IssuerDetector issuerDetector = new IssuerDetector();
+                    String issuer = issuerDetector.detector(parsedCard.getCardNumber(), issuers);
+
+                    parsedCard.setCardIssuer(issuer);
                     cards.add(parsedCard);
                 }
             }
-
         }
         return cards;
     }

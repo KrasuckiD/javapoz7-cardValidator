@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class CSVFNumberReaderTest {
 
-    private static final String CSV_FILE_NAME = "testowy.csv";
+    private static final String CSV_FILE_NAME = "testowyNumber.csv";
 
     @Test
     public void testSCVReader() throws IOException {
@@ -21,11 +21,11 @@ public class CSVFNumberReaderTest {
         List<Card> expected = new ArrayList<>();
         Card card = new Card();
         card.setCardNumber("378282246310005");
-        card.setCardIssuer("unknown");
+        card.setCardIssuer("AmericanExpress");
         expected.add(card);
 
         //when
-        List<Card> result = reader.read(filePath);
+        List<Card> result = reader.readCardNumberFromFilePath(filePath);
 
         //them
         Assert.assertEquals(expected,result);
